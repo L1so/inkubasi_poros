@@ -1,10 +1,10 @@
 services:
   php:
-    image: poros_php
     container_name: p1
     build:
       context: .
       dockerfile: ./Dockerfile
+    image: poros_php
     restart: unless-stopped
     tty: true
     environment:
@@ -12,8 +12,6 @@ services:
       SERVICE_TAGS: dev
     ports:
       - 127.0.0.1:7780:80
-    volumes:
-      - ./src/:/var/www/html/
     networks:
       poros-net:
         ipv4_address: 192.168.23.14

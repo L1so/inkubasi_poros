@@ -1,0 +1,43 @@
+services:
+  php:
+    image: poros_php
+    container_name: p1
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    ports:
+      - 127.0.0.1:7780:80
+    volumes:
+      - ./src/:/var/www/html/
+    networks:
+      poros-net:
+        ipv4_address: 192.168.23.14
+  db:
+    image: mysql:8.1.0
+    container_name: p2
+    environment:
+      MYSQL_ROOT_PASSWORD: XiydUKfmEHdHqwLcaXtUpxqojKjECVndpWXLtubohVeic
+      MYSQL_DATABASE: poros_db
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      poros-net:
+        ipv4_address: 192.168.23.15
+
+networks:
+  poros-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.23.0/24
+          gateway: 192.168.23.1
+
+volumes:
+  dbdata:
+    driver: local
